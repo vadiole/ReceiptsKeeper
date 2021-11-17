@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Receipts</string>
+
+    <string name="your_receipts">Your receipts</string>
+    <string name="today">Today</string>
+    <string name="scan_receipt">Scan receipt</string>
+    <string name="scan_qr_code">Scan QR code</string>
+</resources>
