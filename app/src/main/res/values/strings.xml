@@ -8,4 +8,5 @@
     <string name="today">Today</string>
     <string name="scan_receipt">Scan receipt</string>
     <string name="scan_qr_code">Scan QR code</string>
+    <string name="action_back">Back</string>
 </resources>

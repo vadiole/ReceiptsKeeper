@@ -7,4 +7,5 @@
     <string name="today">Сегодня</string>
     <string name="scan_receipt">Сканировать чек</string>
     <string name="scan_qr_code">Отсканируйте QR код</string>
+    <string name="action_back">Назад</string>
 </resources>
