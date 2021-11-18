@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="themePrimary">#3D3D3D</color>
-    <color name="themeSecondary">#3D3D3D</color>
+    <color name="themeAccent">#3D3D3D</color>
 
     <color name="windowBackground">#2B2B2B</color>
     <color name="windowToolbar">#2B2B2B</color>
