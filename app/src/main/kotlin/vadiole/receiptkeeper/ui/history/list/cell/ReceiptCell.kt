@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.res.ResourcesCompat.getFont
 import androidx.core.widget.TextViewCompat.setTextAppearance
 import androidx.recyclerview.widget.RecyclerView
-import vadiole.core.extensions.RippleRect
+import vadiole.core.extensions.RippleDrawable
 import vadiole.core.extensions.dp
 import vadiole.core.extensions.fill
 import vadiole.core.utils.onClick
@@ -41,7 +41,7 @@ class ReceiptCell(context: Context, click: (id: Int) -> Unit) : LinearLayout(con
 
     init {
         layoutParams = RecyclerView.LayoutParams(fill, 72.dp(context))
-        background = RippleRect(getColor(context, R.color.ripple))
+        background = RippleDrawable(getColor(context, R.color.ripple))
         setPadding(16.dp(context), 0, 16.dp(context), 0)
         orientation = VERTICAL
         isClickable = true
