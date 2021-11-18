@@ -101,7 +101,10 @@ dependencies {
     // room to store receipts
     val roomVersion = "2.3.0"
     implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
+    // https://issuetracker.google.com/issues/174695268#comment9  can be removed after room 2.4.0
+    kapt("org.xerial:sqlite-jdbc:3.36.0")
 }
 
 kapt {
