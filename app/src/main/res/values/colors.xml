@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="themePrimary">#000000</color>
+    <color name="themeSecondary">#666666</color>
+
     <color name="windowBackground">#FFFFFF</color>
+    <color name="windowToolbar">#FFFFFF</color>
+    <color name="ripple">#1F000000</color>
+    <color name="divider">#EAEAEA</color>
+    <color name="textPrimary">#000000</color>
+    <color name="textSecondary">#808080</color>
+    <color name="textButton">#FFFFFF</color>
+
 </resources>

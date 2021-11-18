@@ -10,19 +10,19 @@ android {
 
     defaultConfig {
         applicationId = "vadiole.receiptkeeper"
-        minSdk = 26
+        minSdk = 21
         targetSdk = 31
         versionCode = 1
         versionName = "1.0"
-        resourceConfigurations.addAll(listOf("en"))
+        resourceConfigurations.addAll(listOf("en", "uk", "ru"))
         setProperty("archivesBaseName", "ReceiptKeeper v$versionName ($versionCode)")
     }
 
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
 
@@ -46,10 +46,15 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     lint {
@@ -57,7 +62,7 @@ android {
             "SetTextI18n",
             "RtlHardcoded", "RtlCompat", "RtlEnabled",
             "ViewConstructor",
-            "UnusedAttribute"
+            "UnusedAttribute",
         )
     }
 }
@@ -71,11 +76,17 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.4.0")
     implementation("androidx.fragment:fragment-ktx:1.4.0")
 
-    // viewmodel for mvvm
+    // recycler view for lists
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+
+    // lifecycle and viewmodel for mvvm
     val lifecycleVersion = "2.4.0"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+
+    // for java 8 language features support
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
     // tool for parsing html
     implementation("org.jsoup:jsoup:1.10.3")
