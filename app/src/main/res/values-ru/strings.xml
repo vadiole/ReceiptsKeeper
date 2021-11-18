@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Чеки</string>
+    <string name="your_receipts">Ваши чеки</string>
+    <string name="receipt">Чек: %s</string>
+    <string name="date">Дата: %s</string>
+    <string name="today">Сегодня</string>
+    <string name="scan_receipt">Сканировать чек</string>
+    <string name="scan_qr_code">Отсканируйте QR код</string>
+</resources>
