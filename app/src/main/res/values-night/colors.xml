@@ -10,5 +10,6 @@
     <color name="textPrimary">#FFFFFF</color>
     <color name="textSecondary">#808080</color>
     <color name="textButton">#FFFFFF</color>
+    <color name="iconTint">#FFFFFF</color>
 
 </resources>
