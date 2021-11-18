@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils.loadLayoutAnimation
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,46 +12,49 @@ import vadiole.core.extensions.observe
 import vadiole.core.utils.onClick
 import vadiole.receiptkeeper.R
 import vadiole.receiptkeeper.databinding.FragmentHistoryBinding
+import vadiole.receiptkeeper.ui.MainActivity
 import vadiole.receiptkeeper.ui.history.list.HistoryAdapter
 
 @AndroidEntryPoint
 class HistoryFragment : BaseFragment<HistoryViewModel, FragmentHistoryBinding>() {
     override val viewModel: HistoryViewModel by activityViewModels()
+    private var firstLoad = true
 
-    private val onReceiptClick = { id: Int ->
-        Toast.makeText(requireContext(), "Item $id click", Toast.LENGTH_SHORT).show()
-    }
-
-    private val historyAdapter = HistoryAdapter(onReceiptClick)
-
-
-    override fun onCreateBinding(inflater: LayoutInflater): FragmentHistoryBinding {
-        return FragmentHistoryBinding.inflate(inflater)
-    }
+    override fun onCreateBinding(inflater: LayoutInflater) = FragmentHistoryBinding.inflate(inflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initHistoryList()
+        initHistoryList(savedInstanceState == null && firstLoad)
         initScanButton()
+    }
 
-        val fadeInAnim = loadLayoutAnimation(requireContext(), R.anim.layout_animation_fade_in)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        firstLoad = false
+    }
+
+    private fun initHistoryList(animate: Boolean) = with(binding) {
+        val historyAdapter = HistoryAdapter { id: Int ->
+            navigator.navigate("receipt $id")
+        }
+
+        historyList.setHasFixedSize(true)
+        historyList.adapter = historyAdapter
+        historyList.layoutManager = LinearLayoutManager(context)
+        if (animate) {
+            historyList.layoutAnimation = loadLayoutAnimation(requireContext(), R.anim.layout_animation_fade_in)
+        } else {
+            historyList.layoutAnimation = null
+        }
+
         viewModel.receiptsHistory.observe(viewLifecycleOwner) { data ->
-            if (historyAdapter.itemCount == 0) {
-                binding.historyList.layoutAnimation = fadeInAnim
-                binding.historyList.scheduleLayoutAnimation()
-            }
+            historyList.scheduleLayoutAnimation()
             historyAdapter.submitList(data)
         }
     }
 
-    private fun initHistoryList() = with(binding.historyList) {
-        adapter = historyAdapter
-        layoutManager = LinearLayoutManager(context)
-        setHasFixedSize(true)
-    }
-
     private fun initScanButton() = with(binding) {
         historyScanReceiptButton.onClick = {
-            Toast.makeText(requireContext(), "Scan click", Toast.LENGTH_SHORT).show()
+            navigator.navigate(MainActivity.SCANNER_FRAGMENT)
         }
     }
 }

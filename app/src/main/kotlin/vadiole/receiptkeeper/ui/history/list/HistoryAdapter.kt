@@ -23,7 +23,7 @@ class HistoryAdapter(private val onItemClick: (id: Int) -> Unit) : RecyclerView.
         get() = differ.currentList
 
     init {
-        stateRestorationPolicy = StateRestorationPolicy.PREVENT
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
     }
 
     override fun getItemCount() = differ.currentList.size
