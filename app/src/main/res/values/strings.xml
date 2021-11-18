@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Receipts</string>
-
     <string name="your_receipts">Your receipts</string>
     <string name="receipt">Receipt: %s</string>
     <string name="date">Date: %s</string>
     <string name="today">Today</string>
+    <string name="permission_camera_message">Requires access to the camera so that you can scan QR&#160;codes</string>
     <string name="scan_receipt">Scan receipt</string>
     <string name="scan_qr_code">Scan QR code</string>
+    <string name="scan_error">Invalid QR code</string>
     <string name="action_back">Back</string>
+    <string name="action_grant">Grant</string>
+    <string name="action_cancel">Cancel</string>
 </resources>
