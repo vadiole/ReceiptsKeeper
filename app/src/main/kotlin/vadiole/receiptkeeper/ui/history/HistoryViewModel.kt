@@ -2,6 +2,7 @@ package vadiole.receiptkeeper.ui.history
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
@@ -22,31 +23,28 @@ class HistoryViewModel @Inject constructor(
     private val dayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     private val today = LocalDate.now()
 
-    val historyData = loadReceiptsUseCase.getReceipts()
-        .map { list ->
-            val first = list.firstOrNull() ?: return@map emptyList()
-            val firstHeader = listOf(HistoryDomain.Date(first.date) as HistoryDomain)
-            list.fold(firstHeader) { acc, receipt: HistoryDomain.Receipt ->
-                val lastReceipt = acc.last() as? HistoryDomain.Receipt ?: return@fold acc + receipt
-                return@fold if (lastReceipt.date != receipt.date) {
-                    acc + HistoryDomain.Date(receipt.date) + receipt
-                } else {
-                    acc + receipt
+    val receiptsHistory: Flow<List<HistoryItem>> = loadReceiptsUseCase.invoke().map { list ->
+        val first = list.firstOrNull() ?: return@map emptyList()
+        val firstHeader = listOf(HistoryDomain.Date(first.date) as HistoryDomain)
+        list.fold(firstHeader) { acc, receipt: HistoryDomain.Receipt ->
+            val lastReceipt = acc.last() as? HistoryDomain.Receipt ?: return@fold acc + receipt
+            return@fold if (lastReceipt.date != receipt.date) {
+                acc + HistoryDomain.Date(receipt.date) + receipt
+            } else {
+                acc + receipt
+            }
+        }.map { domain ->
+            when (domain) {
+                is HistoryDomain.Receipt -> {
+                    val datetime = domain.datetime.format(dateTimeFormatter)
+                    HistoryItem.Receipt(domain.id, domain.title, datetime)
                 }
-            }.map { domain ->
-                when (domain) {
-                    is HistoryDomain.Receipt -> {
-                        val datetime = domain.datetime.format(dateTimeFormatter)
-                        HistoryItem.Receipt(domain.id, domain.title, datetime)
-                    }
-                    is HistoryDomain.Date -> {
-                        val formatted = domain.localDate.format(dayFormatter)
-                        val isToday = domain.localDate == today
-                        HistoryItem.Date(formatted, isToday)
-                    }
+                is HistoryDomain.Date -> {
+                    val formatted = domain.localDate.format(dayFormatter)
+                    val isToday = domain.localDate == today
+                    HistoryItem.Date(formatted, isToday)
                 }
             }
         }
-        .shareIn(viewModelScope, SharingStarted.Lazily, replay = 1)
-
+    }.shareIn(viewModelScope, SharingStarted.Lazily, replay = 1)
 }
