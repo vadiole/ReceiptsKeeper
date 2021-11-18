@@ -35,7 +35,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel, FragmentHistoryBinding>()
         initScanButton()
 
         val fadeInAnim = loadLayoutAnimation(requireContext(), R.anim.layout_animation_fade_in)
-        viewModel.historyData.observe(viewLifecycleOwner) { data ->
+        viewModel.receiptsHistory.observe(viewLifecycleOwner) { data ->
             if (historyAdapter.itemCount == 0) {
                 binding.historyList.layoutAnimation = fadeInAnim
                 binding.historyList.scheduleLayoutAnimation()
