@@ -5,26 +5,32 @@
     android:layout_height="match_parent"
     android:splitMotionEvents="false">
 
+    <vadiole.receiptkeeper.ui.view.ScannerView
+        android:id="@+id/scanner_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <ImageButton
         android:id="@+id/scanner_back_button"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_gravity="top|start"
         android:background="?actionBarItemBackground"
         android:contentDescription="@string/action_back"
         android:text="@string/scan_receipt"
-        android:textColor="@color/textPrimary"
         app:srcCompat="@drawable/ic_back"
-        app:tint="@color/textPrimary" />
+        app:tint="@color/textButton" />
 
 
     <TextView
+        android:id="@+id/scanner_title"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_gravity="center"
+        android:layout_gravity="top"
         android:gravity="center"
         android:text="@string/scan_qr_code"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/textButton" />
 
 </FrameLayout>

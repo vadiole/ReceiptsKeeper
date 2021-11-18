@@ -16,6 +16,10 @@ android {
         versionName = "1.0"
         resourceConfigurations.addAll(listOf("en", "uk", "ru"))
         setProperty("archivesBaseName", "ReceiptKeeper v$versionName ($versionCode)")
+        buildConfigField("String",
+                "URL_VALIDATOR",
+                "\"https://cabinet\\\\.sfs\\\\.gov\\\\.ua/cashregs/check\\\\?id=.+&date=[0-9]{8}\""
+        )
     }
 
     buildTypes {
@@ -63,6 +67,7 @@ android {
             "RtlHardcoded", "RtlCompat", "RtlEnabled",
             "ViewConstructor",
             "UnusedAttribute",
+            "SourceLockedOrientationActivity",
         )
     }
 }
@@ -79,6 +84,9 @@ dependencies {
     // recycler view for lists
     implementation("androidx.recyclerview:recyclerview:1.2.1")
 
+    // qr scanner
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
     // lifecycle and viewmodel for mvvm
     val lifecycleVersion = "2.4.0"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
@@ -89,14 +97,14 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
     // tool for parsing html
-    implementation("org.jsoup:jsoup:1.10.3")
+    implementation("org.jsoup:jsoup:1.14.3")
 
     // coroutines for async
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
 
     // hilt for di
-    implementation("com.google.dagger:hilt-android:2.38.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+    implementation("com.google.dagger:hilt-android:2.40.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.40.1")
 
     // room to store receipts
     val roomVersion = "2.3.0"
