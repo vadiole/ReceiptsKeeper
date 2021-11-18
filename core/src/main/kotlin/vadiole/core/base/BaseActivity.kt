@@ -10,7 +10,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(), Navigator {
 
     private val insetsControllerX: WindowInsetsControllerCompat?
         get() = WindowCompat.getInsetsController(window, window.decorView)
