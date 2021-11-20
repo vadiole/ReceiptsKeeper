@@ -8,7 +8,11 @@
     <string name="permission_camera_message">Потрібен доступ до камери, щоб ви могли сканувати QR-коди</string>
     <string name="scan_receipt">Сканувати чек</string>
     <string name="scan_qr_code">Відскануйте QR-код</string>
-    <string name="scan_error">Некоректний QR-код</string>
+    <string name="scan_invalid">Некоректний QR-код</string>
+    <string name="scan_loading">Завантаження чека</string>
+    <string name="scan_no_network">Очікування мережі…</string>
+    <string name="scan_connecting_failed">Не вдалось завантажити</string>
+    <string name="scan_save_failed">Не вдалось зберігти</string>
     <string name="action_back">Назад</string>
     <string name="action_grant">Дозволити</string>
     <string name="action_cancel">Скасувати</string>
