@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 
 sealed class HistoryDomain {
-    class Receipt(val id: Int, val title: String, val datetime: LocalDateTime, raw: String) : HistoryDomain() {
+    class Receipt(val id: String, val title: String, val datetime: LocalDateTime, raw: String) : HistoryDomain() {
         val date: LocalDate get() = datetime.toLocalDate()
     }
 

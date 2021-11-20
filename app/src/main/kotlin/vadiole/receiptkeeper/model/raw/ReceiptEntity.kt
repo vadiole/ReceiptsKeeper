@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Entity(tableName = "Receipt")
 class ReceiptEntity(
     @PrimaryKey
-    val id: Int,
+    val id: String,
     val title: String,
     val datetime: LocalDateTime,
     val raw: String,
