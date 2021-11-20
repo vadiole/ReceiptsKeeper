@@ -4,7 +4,7 @@ import vadiole.receiptkeeper.model.domain.HistoryDomain
 import vadiole.receiptkeeper.model.raw.ReceiptEntity
 import javax.inject.Inject
 
-class ReceiptMapper @Inject constructor() {
+class ReceiptEntityMapper @Inject constructor() {
     fun map(entity: ReceiptEntity) = HistoryDomain.Receipt(
         entity.id,
         entity.title,
