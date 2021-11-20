@@ -16,8 +16,8 @@ import vadiole.core.utils.onClick
 import vadiole.receiptkeeper.R
 import vadiole.receiptkeeper.model.presentation.HistoryItem
 
-class ReceiptCell(context: Context, click: (id: Int) -> Unit) : LinearLayout(context) {
-    private var receiptId: Int = -1
+class ReceiptCell(context: Context, click: (id: String) -> Unit) : LinearLayout(context) {
+    private var receiptId: String? = null
 
     private val title = AppCompatTextView(context).apply {
         setTextAppearance(this, R.style.TextAppearance_AppCompat_Body2)
@@ -48,7 +48,7 @@ class ReceiptCell(context: Context, click: (id: Int) -> Unit) : LinearLayout(con
         isFocusable = true
 
         onClick = { // onClick in init to avoid creating a new listener every bind
-            if (receiptId >= 0) click.invoke(receiptId)
+            receiptId?.let { it1 -> click.invoke(it1) }
         }
 
         addView(title)

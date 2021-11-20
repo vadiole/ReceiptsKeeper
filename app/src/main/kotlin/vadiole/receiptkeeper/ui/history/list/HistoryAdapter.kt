@@ -9,7 +9,7 @@ import vadiole.receiptkeeper.model.presentation.HistoryItem
 import vadiole.receiptkeeper.ui.history.list.cell.DateCell
 import vadiole.receiptkeeper.ui.history.list.cell.ReceiptCell
 
-class HistoryAdapter(private val onItemClick: (id: Int) -> Unit) : RecyclerView.Adapter<HistoryAdapter.Cell>() {
+class HistoryAdapter(private val onItemClick: (id: String) -> Unit) : RecyclerView.Adapter<HistoryAdapter.Cell>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<HistoryItem>() {
         override fun areItemsTheSame(old: HistoryItem, new: HistoryItem) = old == new

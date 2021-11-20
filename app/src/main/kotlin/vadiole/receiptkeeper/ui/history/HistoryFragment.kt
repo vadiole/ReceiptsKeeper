@@ -83,7 +83,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel, FragmentHistoryBinding>()
     }
 
     private fun initHistoryList(animate: Boolean) = with(binding) {
-        val historyAdapter = HistoryAdapter { id: Int ->
+        val historyAdapter = HistoryAdapter { id: String ->
             navigator.navigate("receipt $id")
         }
 

@@ -33,4 +33,12 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/textButton" />
 
+    <WebView
+        android:id="@+id/scanner_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top"
+        android:background="@android:color/transparent"
+        android:visibility="gone" />
+
 </FrameLayout>
