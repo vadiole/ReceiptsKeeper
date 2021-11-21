@@ -13,7 +13,15 @@
     <string name="scan_no_network">Ожидание сети…</string>
     <string name="scan_connecting_failed">Не удалось подключиться</string>
     <string name="scan_save_failed">Не удалось сохранить</string>
+    <string name="details_receipt">Детали чека</string>
+    <string name="details_no_browser">Веб-браузер не установлен</string>
+    <string name="details_delete_alert_title">Удалить чек</string>
+    <string name="details_delete_alert_text">Вы точно хотите удалить этот чек?</string>
+    <string name="share_with">Отправить с помощью:</string>
     <string name="action_back">Назад</string>
     <string name="action_grant">Grant</string>
     <string name="action_cancel">Отмена</string>
+    <string name="action_online">Онлайн</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_share">Отправить</string>
 </resources>
