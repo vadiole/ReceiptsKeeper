@@ -13,7 +13,15 @@
     <string name="scan_no_network">Waiting for network…</string>
     <string name="scan_connecting_failed">Connecting failed</string>
     <string name="scan_save_failed">Saving failed</string>
+    <string name="details_receipt">Receipt details</string>
+    <string name="details_no_browser">Web browser not installed</string>
+    <string name="details_delete_alert_title">Delete receipt</string>
+    <string name="details_delete_alert_text">Are you sure you want to delete this receipt?</string>
+    <string name="share_with">Share with:</string>
     <string name="action_back">Back</string>
     <string name="action_grant">Grant</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_online">Online</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_share">Share</string>
 </resources>

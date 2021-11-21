@@ -96,6 +96,9 @@ dependencies {
     // recycler view for lists
     implementation("androidx.recyclerview:recyclerview:1.2.1")
 
+    // chrome tabs
+    implementation("androidx.browser:browser:1.4.0")
+
     // qr scanner
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 

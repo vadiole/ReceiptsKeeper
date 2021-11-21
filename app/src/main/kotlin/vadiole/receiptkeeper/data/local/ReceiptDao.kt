@@ -19,5 +19,5 @@ interface ReceiptDao {
     suspend fun insertReceipt(entity: ReceiptEntity)
 
     @Query("DELETE FROM Receipt WHERE id = :id")
-    suspend fun deleteReceipt(id: Int)
+    suspend fun deleteReceipt(id: String)
 }

@@ -26,6 +26,8 @@ abstract class BaseFragment<T : BaseViewModel, V : ViewBinding> : Fragment() {
     private var _navigator: Navigator? = null
     val navigator: Navigator get() = _navigator!!
 
+    open val autoStartTransition = true
+
     private val backCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             isEnabled = onBackPressed()
@@ -54,7 +56,7 @@ abstract class BaseFragment<T : BaseViewModel, V : ViewBinding> : Fragment() {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         onBindingCreated(savedInstanceState)
-        startPostponedEnterTransition()
+        if (autoStartTransition) startPostponedEnterTransition()
     }
 
     override fun onDestroyView() {
