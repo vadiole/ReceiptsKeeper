@@ -12,5 +12,5 @@ class ReceiptRepository @Inject constructor(private val receiptDao: ReceiptDao) 
 
     suspend fun insertReceipt(entity: ReceiptEntity) = receiptDao.insertReceipt(entity)
 
-    suspend fun deleteReceipt(id: Int) = receiptDao.deleteReceipt(id)
+    suspend fun deleteReceipt(id: String) = receiptDao.deleteReceipt(id)
 }

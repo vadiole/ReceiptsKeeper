@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * Helper class to prevent double clicks in the same frame
  */
-private class DebouncingOnClick<T : View>(
+class DebouncingOnClick<T : View>(
     private val intervalMillis: Long = 0,
     private val click: ((T) -> Unit),
 ) : View.OnClickListener {

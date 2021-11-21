@@ -23,6 +23,7 @@ import android.webkit.WebSettings.FORCE_DARK_ON
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.annotation.StringRes
+import androidx.core.os.bundleOf
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener
 import androidx.core.view.WindowInsetsCompat.Type.navigationBars
@@ -46,6 +47,8 @@ import vadiole.receiptkeeper.BuildConfig.URL_VALIDATOR
 import vadiole.receiptkeeper.R
 import vadiole.receiptkeeper.databinding.FragmentScannerBinding
 import vadiole.receiptkeeper.model.raw.ReceiptRaw
+import vadiole.receiptkeeper.ui.MainActivity
+import vadiole.receiptkeeper.ui.details.DetailsFragment
 import java.net.HttpURLConnection
 import java.net.HttpURLConnection.HTTP_OK
 import java.net.URL
@@ -78,6 +81,7 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
             }
         }
     }
+
     private val invalidQrRunnable = object : Runnable {
         override fun run() {
             if (binding.scannerTitle.text != getString(R.string.scan_invalid)) return
@@ -134,7 +138,8 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
             result.fold(
                 onSuccess = { receiptId ->
                     if (receiptId != null) {
-                        Toast.makeText(requireContext(), "saved: $receiptId", Toast.LENGTH_SHORT).show()
+                        val args = bundleOf(DetailsFragment.RECEIPT_ID_KEY to receiptId)
+                        navigator.navigate(MainActivity.DETAILS_FRAGMENT, args)
                     }
                 },
                 onFailure = {
@@ -142,6 +147,7 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
                 }
             )
         }
+
     }
 
     override fun onResume() = with(activity as BaseActivity) {
@@ -154,9 +160,6 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
 
     override fun onPause() = with(activity as BaseActivity) {
         super.onPause()
-        val isNightMode = VERSION.SDK_INT >= 30 && resources.configuration.isNightModeActive
-        insetsControllerX?.isAppearanceLightStatusBars = !isNightMode
-        insetsControllerX?.isAppearanceLightNavigationBars = !isNightMode
         requestedOrientation = SCREEN_ORIENTATION_UNSPECIFIED
         binding.scannerView.pause()
     }
@@ -164,6 +167,11 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
     override fun onDestroyView() {
         super.onDestroyView()
         loadingHandler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onBackPressed(): Boolean {
+        navigator.navigate(MainActivity.HISTORY_FRAGMENT)
+        return true
     }
 
     private fun initBackButton() = with(binding) {
