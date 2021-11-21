@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:splitMotionEvents="false">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:text="@string/details_receipt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <ImageButton
+        android:id="@+id/details_back_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="top|start"
+        android:background="?actionBarItemBackground"
+        android:contentDescription="@string/action_back"
+        app:srcCompat="@drawable/ic_back"
+        app:tint="@color/iconTint" />
+
+    <ImageButton
+        android:id="@+id/details_delete_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="top|end"
+        android:background="?actionBarItemBackground"
+        android:contentDescription="@string/action_delete"
+        app:srcCompat="@drawable/ic_delete"
+        app:tint="@color/iconTint" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="56dp"
+        android:background="@color/divider" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/details_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="64dp"
+        android:overScrollMode="ifContentScrolls">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/details_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:paddingHorizontal="24dp"
+            android:gravity="left"
+            android:paddingVertical="24dp"
+            android:textColor="@color/textPrimary"
+            app:fontFamily="@font/sf_mono_regular"
+            tools:text="@tools:sample/lorem/random" />
+    </androidx.core.widget.NestedScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/list_bottom_fade" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginBottom="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/details_online__button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="2dp"
+            android:layout_weight="1"
+            android:text="@string/action_online"
+            android:textColor="@color/textButton" />
+
+        <Button
+            android:id="@+id/details_share_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="2dp"
+            android:layout_weight="1"
+            android:text="@string/action_share"
+            android:textColor="@color/textButton" />
+
+    </LinearLayout>
+
+</FrameLayout>
