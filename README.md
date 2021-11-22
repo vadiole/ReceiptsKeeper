@@ -7,9 +7,9 @@ Scan and view your e-receipts
 - Entering a captcha, if the site requires
 - Receipts loading and saving
 - View, delete, share your receipts
+- Support English, Ukrainian, Russian locales
 
 #### Also
-
 - Material ui
 - Beautiful animations
 - Dark theme support
