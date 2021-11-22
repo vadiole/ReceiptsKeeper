@@ -75,6 +75,7 @@ android {
 
     lint {
         disable(
+            "Instantiatable", // https://stackoverflow.com/questions/68899665/error-mainactivity-must-extend-android-app-activity-instantiatable
             "SetTextI18n",
             "RtlHardcoded", "RtlCompat", "RtlEnabled",
             "ViewConstructor",
