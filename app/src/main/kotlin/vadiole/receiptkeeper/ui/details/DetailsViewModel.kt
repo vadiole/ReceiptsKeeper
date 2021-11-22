@@ -16,8 +16,7 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val loadReceiptUseCase: LoadReceiptUseCase,
     private val deleteReceiptUseCase: DeleteReceiptUseCase,
-
-    ) : BaseViewModel() {
+) : BaseViewModel() {
 
     private val _receiptDetails = MutableStateFlow<HistoryDomain.Receipt?>(null)
     val receiptDetails = _receiptDetails.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)

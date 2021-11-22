@@ -12,9 +12,7 @@ import vadiole.receiptkeeper.usecase.SaveReceiptUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class ScannerViewModel @Inject constructor(
-    private val saveUseCase: SaveReceiptUseCase,
-) : BaseViewModel() {
+class ScannerViewModel @Inject constructor(private val saveUseCase: SaveReceiptUseCase) : BaseViewModel() {
 
     private val _result = MutableStateFlow(Result.success<String?>(null))
     val result = _result.shareIn(viewModelScope, SharingStarted.Lazily, 0)
@@ -23,8 +21,8 @@ class ScannerViewModel @Inject constructor(
         saveUseCase.invoke(raw, id, date).fold(
             onSuccess = {
                 _result.value = Result.success(id)
-
-            }, onFailure = {
+            },
+            onFailure = {
                 _result.value = Result.failure(it)
             }
         )
