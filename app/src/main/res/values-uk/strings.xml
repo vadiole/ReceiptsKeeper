@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Чеки</string>
+    <string name="your_receipts">Ваші чеки</string>
+    <string name="receipt">Чек: %s</string>
+    <string name="date">Дата: %s</string>
+    <string name="today">Сьогодні</string>
+    <string name="permission_camera_message">Потрібен доступ до камери, щоб ви могли сканувати QR-коди</string>
+    <string name="scan_receipt">Сканувати чек</string>
+    <string name="scan_qr_code">Відскануйте QR-код</string>
+    <string name="scan_invalid">Некоректний QR-код</string>
+    <string name="scan_loading">Завантаження чека</string>
+    <string name="scan_error_no_network">Очікування мережі…</string>
+    <string name="scan_error_connection">Не вдалось завантажити</string>
+    <string name="scan_error_save">Не вдалось зберігти</string>
+    <string name="details_error_loading">Помилка завантаження</string>
+    <string name="details_receipt">Деталі чека</string>
+    <string name="details_no_browser">Веб-браузер не встановлено</string>
+    <string name="details_delete_alert_title">Видалити чек</string>
+    <string name="details_delete_alert_text">Ви дійсно хочете видалити цей чек?</string>
+    <string name="share_with">Надіслати за допомогою:</string>
+    <string name="action_back">Назад</string>
+    <string name="action_grant">Дозволити</string>
+    <string name="action_cancel">Скасувати</string>
+    <string name="action_online">Онлайн</string>
+    <string name="action_delete">Видалити</string>
+    <string name="action_share">Надіслати</string>
+</resources>

@@ -1,30 +1,59 @@
 package vadiole.receiptkeeper.ui
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.Gravity
-import android.widget.FrameLayout
-import android.widget.TextView
+import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import vadiole.core.base.BaseActivity
-import vadiole.core.extensions.dpf
-import vadiole.core.extensions.fill
+import vadiole.core.base.Navigator
+import vadiole.receiptkeeper.R
+import vadiole.receiptkeeper.ui.details.DetailsFragment
+import vadiole.receiptkeeper.ui.history.HistoryFragment
+import vadiole.receiptkeeper.ui.scanner.ScannerFragment
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), Navigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        setContentView(
-            TextView(this).apply {
-                layoutParams = FrameLayout.LayoutParams(fill, fill)
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, 14f.dpf(context))
-                gravity = Gravity.CENTER
-                setTextColor(Color.GRAY)
-                text = "Receipts"
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                val historyFragment = HistoryFragment()
+                replace(R.id.fragment_container, historyFragment, HISTORY_FRAGMENT)
             }
-        )
+        }
+    }
+
+    override fun navigate(destination: String, args: Bundle?) {
+        if (supportFragmentManager.findFragmentByTag(destination)?.isAdded == true) return
+
+        when (destination) {
+            SCANNER_FRAGMENT -> {
+                supportFragmentManager.commit {
+                    addToBackStack(destination)
+                    val fragment = ScannerFragment()
+                    replace(R.id.fragment_container, fragment, destination)
+                }
+            }
+            DETAILS_FRAGMENT -> {
+                supportFragmentManager.commit {
+                    addToBackStack(destination)
+                    val fragment = DetailsFragment(args)
+                    replace(R.id.fragment_container, fragment, destination)
+                }
+            }
+            HISTORY_FRAGMENT -> {
+                supportFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
+            }
+            else -> return
+        }
+    }
+
+    companion object {
+        const val HISTORY_FRAGMENT = "history_fragment"
+        const val SCANNER_FRAGMENT = "scanner_fragment"
+        const val DETAILS_FRAGMENT = "details_fragment"
     }
 }

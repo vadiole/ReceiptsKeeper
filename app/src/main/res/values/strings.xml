@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Receipts</string>
-
     <string name="your_receipts">Your receipts</string>
+    <string name="receipt">Receipt: %s</string>
+    <string name="date">Date: %s</string>
     <string name="today">Today</string>
+    <string name="permission_camera_message">Requires access to the camera so that you can scan QR&#160;codes</string>
     <string name="scan_receipt">Scan receipt</string>
     <string name="scan_qr_code">Scan QR code</string>
+    <string name="scan_invalid">Invalid QR code</string>
+    <string name="scan_loading">Loading receipt</string>
+    <string name="scan_error_no_network">Waiting for network…</string>
+    <string name="scan_error_connection">Connecting failed</string>
+    <string name="scan_error_save">Saving failed</string>
+    <string name="details_error_loading">Loading failed</string>
+    <string name="details_receipt">Receipt details</string>
+    <string name="details_no_browser">Web browser not installed</string>
+    <string name="details_delete_alert_title">Delete receipt</string>
+    <string name="details_delete_alert_text">Are you sure you want to delete this receipt?</string>
+    <string name="share_with">Share with:</string>
+    <string name="action_back">Back</string>
+    <string name="action_grant">Grant</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_online">Online</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_share">Share</string>
 </resources>
