@@ -1,31 +1,32 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id("com.android.library")
+    kotlin("android")
 }
 
 android {
-    compileSdk 31
+    compileSdk = 31
 
     defaultConfig {
-        minSdk 21
-        targetSdk 31
+        minSdk = 21
+        targetSdk = 31
     }
 
     buildTypes {
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
-        debug {
-            minifyEnabled false
+        getByName("debug") {
+            isMinifyEnabled = false
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 
     buildFeatures {

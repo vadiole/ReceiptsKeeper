@@ -11,5 +11,5 @@
     <color name="textSecondary">#808080</color>
     <color name="textButton">#FFFFFF</color>
     <color name="iconTint">#FFFFFF</color>
-
+    <color name="highlight">#80808080</color>
 </resources>

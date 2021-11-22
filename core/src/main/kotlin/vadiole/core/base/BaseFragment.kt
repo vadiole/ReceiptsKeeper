@@ -21,19 +21,22 @@ abstract class BaseFragment<T : BaseViewModel, V : ViewBinding> : Fragment() {
     abstract val viewModel: T
 
     private var _binding: V? = null
-    val binding: V get() = _binding!!
+    val binding: V get() = requireNotNull(_binding) { "binding is null after onDestroy or before onCreateBinding" }
 
     private var _navigator: Navigator? = null
     val navigator: Navigator get() = _navigator!!
 
-    open val autoStartTransition = true
-
-    private val backCallback = object : OnBackPressedCallback(true) {
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            isEnabled = onBackPressed()
-            if (!isEnabled) requireActivity().onBackPressed()
+            if (isEnabled) {
+                isEnabled = onBackPressed()
+            } else {
+                requireActivity().onBackPressed()
+            }
         }
     }
+
+    open val autoStartTransition = true
 
     abstract fun onCreateBinding(inflater: LayoutInflater): V
 
@@ -67,6 +70,6 @@ abstract class BaseFragment<T : BaseViewModel, V : ViewBinding> : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         _navigator = context as Navigator
-        requireActivity().onBackPressedDispatcher.addCallback(this, backCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 }

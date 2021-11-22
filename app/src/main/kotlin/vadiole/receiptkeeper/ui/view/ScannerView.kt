@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
 import com.journeyapps.barcodescanner.BarcodeView
-import vadiole.core.extensions.dpf
+import vadiole.core.extensions.dp
 
 class ScannerView @JvmOverloads constructor(
     context: Context,
@@ -14,37 +14,35 @@ class ScannerView @JvmOverloads constructor(
     defStyle: Int = 0,
 ) : BarcodeView(context, attrs, defStyle) {
 
-    private val path = Path()
-
-    private val paint = Paint().apply {
+    private val backgroundPaint = Paint().apply {
         color = 0x7f000000
     }
-
     private val cornerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeJoin = Paint.Join.ROUND
         strokeCap = Paint.Cap.ROUND
         style = Paint.Style.STROKE
-        strokeWidth = 2.dpf(context)
+        strokeWidth = 2f.dp(context)
         color = -0x1
     }
-
-    private val corner = 32.dpf(context)
+    private val cornerPath = Path()
+    private val corner = 32f.dp(context)
 
     init {
         isUseTextureView = true
     }
 
+    // drawing dim and corners
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         val size = (width.coerceAtMost(height) / 1.5f).toInt()
         val x = (width - size) / 2f
         val y = (height - size) / 2f
-        canvas.drawRect(0f, 0f, width.toFloat(), y, paint)
-        canvas.drawRect(0f, (y + size), width.toFloat(), height.toFloat(), paint)
-        canvas.drawRect(0f, y, x, (y + size), paint)
-        canvas.drawRect((x + size), y, width.toFloat(), (y + size), paint)
+        canvas.drawRect(0f, 0f, width.toFloat(), y, backgroundPaint)
+        canvas.drawRect(0f, (y + size), width.toFloat(), height.toFloat(), backgroundPaint)
+        canvas.drawRect(0f, y, x, (y + size), backgroundPaint)
+        canvas.drawRect((x + size), y, width.toFloat(), (y + size), backgroundPaint)
 
-        with(path) {
+        with(cornerPath) {
             reset()
             moveTo(x, y + corner)
             lineTo(x, y)

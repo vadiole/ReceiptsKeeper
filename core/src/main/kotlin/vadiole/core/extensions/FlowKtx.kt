@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
+/**
+ * Extension to observe flow like livedata
+ */
 fun <T> Flow<T>.observe(
     owner: LifecycleOwner,
     action: suspend (T) -> Unit,

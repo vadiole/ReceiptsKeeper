@@ -28,6 +28,7 @@ import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener
 import androidx.core.view.WindowInsetsCompat.Type.navigationBars
 import androidx.core.view.WindowInsetsCompat.Type.statusBars
+import androidx.core.view.isVisible
 import androidx.core.view.postDelayed
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
@@ -42,8 +43,7 @@ import vadiole.core.extensions.dp
 import vadiole.core.extensions.observe
 import vadiole.core.utils.hasNetworkConnection
 import vadiole.core.utils.onClick
-import vadiole.receiptkeeper.BuildConfig
-import vadiole.receiptkeeper.BuildConfig.URL_VALIDATOR
+import vadiole.receiptkeeper.BuildConfig.*
 import vadiole.receiptkeeper.R
 import vadiole.receiptkeeper.databinding.FragmentScannerBinding
 import vadiole.receiptkeeper.model.raw.ReceiptRaw
@@ -58,30 +58,25 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
 
     override val viewModel: ScannerViewModel by viewModels()
     private val jsonConfig = Json { ignoreUnknownKeys = true }
-    private val urlRegex = Regex(URL_VALIDATOR)
-
-    private val shakeAnim = TranslateAnimation(0f, 10f, 0f, 0f).apply {
-        interpolator = CycleInterpolator(7f)
-        duration = 500
-    }
+    private val urlValidator = Regex(URL_VALIDATOR)
 
     private var receiptsId: String? = null
     private var receiptDate: String? = null
     private var receiptUrl: String? = null
+
     private val loadingHandler = Handler(Looper.getMainLooper())
-    private val retryLoadRunnable = object : Runnable {
+    private val loadReceiptRunnable = object : Runnable {
         override fun run() {
             val url = receiptUrl ?: return
-            if (context?.hasNetworkConnection == true) {
+            if (requireContext().hasNetworkConnection) {
                 setTitle(R.string.scan_loading)
                 binding.scannerWebview.loadUrl(url)
             } else {
-                setTitle(R.string.scan_no_network, shake = true)
+                setTitle(R.string.scan_error_no_network, shake = true)
                 loadingHandler.postDelayed(this, 2000)
             }
         }
     }
-
     private val invalidQrRunnable = object : Runnable {
         override fun run() {
             if (binding.scannerTitle.text != getString(R.string.scan_invalid)) return
@@ -95,7 +90,7 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
 
             val scannedUrl = result.text
 
-            if (urlRegex.matches(scannedUrl)) {
+            if (urlValidator.matches(scannedUrl)) {
                 setTitle(R.string.scan_loading)
 
                 val uri = Uri.parse(scannedUrl)
@@ -143,7 +138,7 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
                     }
                 },
                 onFailure = {
-                    Toast.makeText(requireContext(), R.string.scan_save_failed, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.scan_error_save, Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -160,6 +155,9 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
 
     override fun onPause() = with(activity as BaseActivity) {
         super.onPause()
+        val isNightMode = VERSION.SDK_INT >= 30 && resources.configuration.isNightModeActive
+        insetsControllerX?.isAppearanceLightStatusBars = !isNightMode
+        insetsControllerX?.isAppearanceLightNavigationBars = !isNightMode
         requestedOrientation = SCREEN_ORIENTATION_UNSPECIFIED
         binding.scannerView.pause()
     }
@@ -174,15 +172,15 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
         return true
     }
 
-    private fun initBackButton() = with(binding) {
-        scannerBackButton.onClick = {
+    private fun initBackButton() = with(binding.scannerBackButton) {
+        onClick = {
             requireActivity().onBackPressed()
         }
     }
 
-    private fun initScannerView() = with(binding) {
-        scannerView.keepScreenOn = true
-        scannerView.decodeContinuous(qrCallback)
+    private fun initScannerView() = with(binding.scannerView) {
+        keepScreenOn = true
+        decodeContinuous(qrCallback)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -199,41 +197,35 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
             }
         }
         webViewClient = object : WebViewClient() {
+            // clearing web page when loaded
             override fun onPageFinished(view: WebView, url: String?) {
                 view.visibility = View.INVISIBLE
-
                 view.loadUrl(cleanPageScript)
                 view.setBackgroundColor(Color.TRANSPARENT)
             }
 
-            override fun shouldInterceptRequest(
-                view: WebView,
-                request: WebResourceRequest
-            ): WebResourceResponse? {
+            // intercepting qr and captcha loading
+            override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
                 try {
                     val requestUrl = request.url.toString()
                     when {
-                        requestUrl.contains(BuildConfig.URL_SLICE_RECEIPT) -> {
+                        requestUrl.contains(URL_SLICE_RECEIPT) -> {
                             receiptUrl = null
-
                             val urlConnection = URL(requestUrl).openConnection() as HttpURLConnection
-
                             if (urlConnection.responseCode == HTTP_OK) {
                                 val encoded = urlConnection.inputStream.bufferedReader().readText()
                                 val receiptRaw = jsonConfig.decodeFromString<ReceiptRaw>(encoded)
-
                                 viewModel.saveReceipt(receiptRaw, receiptsId!!, receiptDate!!)
                                 return null
                             }
                         }
-                        requestUrl.contains(BuildConfig.URL_SLICE_CAPTCHA) -> {
+                        requestUrl.contains(URL_SLICE_CAPTCHA) -> {
                             receiptUrl = null
-
                             activity?.runOnUiThread {
                                 view.loadUrl(cleanPageScript)
                                 // dirty hack to avoid showing background dim
                                 view.postDelayed(1000L) {
-                                    view.visibility = View.VISIBLE
+                                    view.isVisible = true
                                 }
                             }
                             return null
@@ -245,7 +237,7 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
                 }
                 activity?.runOnUiThread {
                     setTitle(R.string.scan_qr_code)
-                    Toast.makeText(context, R.string.scan_connecting_failed, LENGTH_LONG).show()
+                    Toast.makeText(context, R.string.scan_error_connection, LENGTH_LONG).show()
                     binding.scannerView.decodeContinuous(qrCallback)
                 }
                 return null
@@ -255,11 +247,11 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
 
     private fun loadReceipt(url: String) {
         receiptUrl = url
-        loadingHandler.post(retryLoadRunnable)
+        loadingHandler.post(loadReceiptRunnable)
         loadingHandler.postDelayed(10000) { // timeout
             if (receiptUrl != null) {
-                Toast.makeText(context, R.string.scan_connecting_failed, LENGTH_LONG).show()
                 setTitle(R.string.scan_qr_code)
+                Toast.makeText(requireContext(), R.string.scan_error_connection, LENGTH_LONG).show()
                 binding.scannerView.decodeContinuous(qrCallback)
                 receiptUrl = null
             }
@@ -272,6 +264,10 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
         scannerTitle.clearAnimation()
 
         if (shake) {
+            val shakeAnim = TranslateAnimation(0f, 10f, 0f, 0f).apply {
+                interpolator = CycleInterpolator(7f)
+                duration = 500
+            }
             scannerTitle.startAnimation(shakeAnim)
         }
 
@@ -281,13 +277,10 @@ class ScannerFragment : BaseFragment<ScannerViewModel, FragmentScannerBinding>()
     }
 
     companion object {
-        private val cleanPageScript = """
-            javascript:
-                (() => {
-                    document.getElementsByClassName("p-grid p-nogutter main-page")[0].style.display = "none";
-                    document.body.style.background = 0;
-                    document.body.childNodes[document.body.childNodes.length - 1].firstChild.style.display = "none";
-                })()
-        """.trimIndent()
+        private const val cleanPageScript = """javascript:(() => {
+            document.getElementsByClassName("p-grid p-nogutter main-page")[0].style.display = "none";
+            document.body.style.background = 0;
+            document.body.childNodes[document.body.childNodes.length - 1].firstChild.style.display = "none";
+        })()"""
     }
 }

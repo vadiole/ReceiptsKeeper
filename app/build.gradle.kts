@@ -102,10 +102,8 @@ dependencies {
     // qr scanner
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
-    // lifecycle and viewmodel for mvvm
     val lifecycleVersion = "2.4.0"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
 
     // for java 8 language features support

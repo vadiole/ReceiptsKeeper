@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/windowBackground"
-    android:clipChildren="false"
+    android:clipChildren="true"
     android:clipToPadding="false"
     android:splitMotionEvents="false">
 
@@ -57,12 +57,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:paddingHorizontal="24dp"
             android:gravity="left"
+            android:paddingHorizontal="24dp"
             android:paddingVertical="24dp"
             android:textColor="@color/textPrimary"
             app:fontFamily="@font/sf_mono_regular"
             tools:text="@tools:sample/lorem/random" />
+
     </androidx.core.widget.NestedScrollView>
 
     <View
@@ -72,16 +73,15 @@
         android:layout_marginBottom="64dp"
         android:background="@drawable/list_bottom_fade" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="68dp"
         android:layout_gravity="bottom"
         android:layout_marginHorizontal="14dp"
-        android:layout_marginBottom="8dp"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="8dp">
 
         <Button
             android:id="@+id/details_online__button"

@@ -12,15 +12,20 @@ import vadiole.receiptkeeper.ui.history.list.cell.ReceiptCell
 class HistoryAdapter(private val onItemClick: (id: String) -> Unit) : RecyclerView.Adapter<HistoryAdapter.Cell>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<HistoryItem>() {
-        override fun areItemsTheSame(old: HistoryItem, new: HistoryItem) = old == new
+        override fun areItemsTheSame(old: HistoryItem, new: HistoryItem) = when {
+            old is HistoryItem.Receipt && new is HistoryItem.Receipt -> old.id == new.id
+            old is HistoryItem.Date && new is HistoryItem.Date -> old.value == new.value
+            else -> false
+        }
 
-        override fun areContentsTheSame(old: HistoryItem, new: HistoryItem) = old == new
+        override fun areContentsTheSame(old: HistoryItem, new: HistoryItem) = when {
+            old is HistoryItem.Date && new is HistoryItem.Date -> old == new
+            old is HistoryItem.Receipt && new is HistoryItem.Receipt -> old == new
+            else -> false
+        }
     }
 
     private val differ: AsyncListDiffer<HistoryItem> = AsyncListDiffer(this, differCallback)
-
-    private val currentList: List<HistoryItem>
-        get() = differ.currentList
 
     init {
         stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY

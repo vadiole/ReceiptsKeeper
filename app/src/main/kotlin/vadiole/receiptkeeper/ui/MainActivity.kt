@@ -1,8 +1,6 @@
 package vadiole.receiptkeeper.ui
 
 import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,10 +20,10 @@ class MainActivity : BaseActivity(), Navigator {
 
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
-                replace(R.id.fragment_container, HistoryFragment(), HISTORY_FRAGMENT)
+                val historyFragment = HistoryFragment()
+                replace(R.id.fragment_container, historyFragment, HISTORY_FRAGMENT)
             }
         }
-
     }
 
     override fun navigate(destination: String, args: Bundle?) {
@@ -37,7 +35,6 @@ class MainActivity : BaseActivity(), Navigator {
                     addToBackStack(destination)
                     val fragment = ScannerFragment()
                     replace(R.id.fragment_container, fragment, destination)
-
                 }
             }
             DETAILS_FRAGMENT -> {

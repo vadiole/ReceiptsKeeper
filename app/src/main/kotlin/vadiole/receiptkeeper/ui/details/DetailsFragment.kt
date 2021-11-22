@@ -1,34 +1,8 @@
 package vadiole.receiptkeeper.ui.details
 
+import android.content.ComponentName
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
-import android.net.Uri
-import android.os.Bundle
-import android.util.TypedValue
-import android.view.LayoutInflater
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
-import androidx.appcompat.app.AlertDialog
-import androidx.browser.customtabs.CustomTabsIntent.SHARE_STATE_OFF
-import androidx.core.content.ContextCompat.getColor
-import androidx.core.content.ContextCompat.getDrawable
-import androidx.core.content.res.ResourcesCompat.getFont
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.text.PrecomputedTextCompat
-import androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener
-import androidx.core.view.WindowInsetsCompat.*
-import androidx.core.view.WindowInsetsCompat.Type.*
-import androidx.core.widget.TextViewCompat
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import vadiole.core.base.BaseFragment
-import vadiole.core.extensions.dpf
-import vadiole.core.extensions.observe
-import vadiole.core.utils.onClick
-import vadiole.receiptkeeper.R
-import vadiole.receiptkeeper.databinding.FragmentDetailsBinding
-import android.content.ComponentName
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.graphics.*
 import android.graphics.Bitmap.Config.ARGB_8888
@@ -36,16 +10,39 @@ import android.graphics.Bitmap.createBitmap
 import android.graphics.Color.BLACK
 import android.graphics.PorterDuff.Mode.DST_OVER
 import android.graphics.PorterDuff.Mode.SRC_ATOP
-import androidx.browser.customtabs.*
-
-import android.view.View
+import android.net.Uri
+import android.os.Bundle
+import android.util.TypedValue
+import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
+import androidx.appcompat.app.AlertDialog
+import androidx.browser.customtabs.*
+import androidx.browser.customtabs.CustomTabsIntent.SHARE_STATE_OFF
 import androidx.core.app.ShareCompat
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat.getFont
 import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.text.PrecomputedTextCompat
+import androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener
+import androidx.core.view.WindowInsetsCompat.*
+import androidx.core.view.WindowInsetsCompat.Type.*
+import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.viewModels
-import kotlinx.coroutines.delay
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import vadiole.core.base.BaseFragment
+import vadiole.core.extensions.dp
+import vadiole.core.extensions.observe
 import vadiole.core.utils.DebouncingOnClick
+import vadiole.core.utils.onClick
+import vadiole.receiptkeeper.R
+import vadiole.receiptkeeper.databinding.FragmentDetailsBinding
 import vadiole.receiptkeeper.ui.MainActivity
 import java.io.File
 
@@ -84,6 +81,7 @@ class DetailsFragment() : BaseFragment<DetailsViewModel, FragmentDetailsBinding>
         initShareButton()
 
         observeDelete()
+        observeError()
         observeReceipt(didLoad = {
             startPostponedEnterTransition()
         })
@@ -128,8 +126,6 @@ class DetailsFragment() : BaseFragment<DetailsViewModel, FragmentDetailsBinding>
             .setNavigationBarColor(Color.WHITE)
             .setNavigationBarDividerColor(Color.WHITE)
             .build()
-
-
         val chromeIntent = CustomTabsIntent.Builder()
             .setCloseButtonIcon(icon.toBitmap())
             .setDefaultColorSchemeParams(params)
@@ -140,9 +136,8 @@ class DetailsFragment() : BaseFragment<DetailsViewModel, FragmentDetailsBinding>
             .setShowTitle(false)
             .build()
 
-        setOnClickListener(DebouncingOnClick<Button>(1000, click = handler@{
-            val url = receiptUrl ?: return@handler
-
+        setOnClickListener(DebouncingOnClick<Button>(1000) {
+            val url = receiptUrl ?: return@DebouncingOnClick
             try {
                 chromeIntent.launchUrl(context, url)
             } catch (e: Exception) { // no chrome tabs on device
@@ -155,12 +150,11 @@ class DetailsFragment() : BaseFragment<DetailsViewModel, FragmentDetailsBinding>
                     Toast.makeText(context, R.string.details_no_browser, LENGTH_SHORT).show()
                 }
             }
-        }))
+        })
     }
 
     private fun initShareButton() = with(binding.detailsShareButton) {
-        setOnClickListener(DebouncingOnClick<Button>(1000, click = {
-
+        setOnClickListener(DebouncingOnClick<Button>(1000) {
             val bitmap = with(binding.detailsTextview) {
                 createBitmap(width, height, ARGB_8888).applyCanvas {
                     translate(-scrollX.toFloat(), -scrollY.toFloat())
@@ -169,13 +163,11 @@ class DetailsFragment() : BaseFragment<DetailsViewModel, FragmentDetailsBinding>
                     drawColor(Color.WHITE, DST_OVER)
                 }
             }
-
             val file = File(context.cacheDir, "receipt-$receiptId.png")
             file.outputStream().use { out ->
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
                 out.flush()
             }
-
             val fileUri = FileProvider.getUriForFile(requireContext(), "vadiole.receiptkeeper.share", file)
             val intent = ShareCompat.IntentBuilder(requireActivity())
                 .setStream(fileUri)
@@ -183,14 +175,13 @@ class DetailsFragment() : BaseFragment<DetailsViewModel, FragmentDetailsBinding>
                 .intent
                 .setFlags(FLAG_GRANT_READ_URI_PERMISSION)
                 .setData(fileUri)
-
             startActivity(Intent.createChooser(intent, getString(R.string.share_with)))
-        }))
+        })
     }
 
     private fun observeReceipt(didLoad: () -> Unit) = with(binding.detailsTextview) {
         // random size to calculate the width of the text and adjust the size
-        receiptTextPaint.textSize = 100.dpf(context)
+        receiptTextPaint.textSize = 100f.dp(context)
         receiptTextPaint.typeface = getFont(context, R.font.sf_mono_regular)
 
         viewModel.receiptDetails.observe(viewLifecycleOwner) { receipt ->
@@ -203,7 +194,6 @@ class DetailsFragment() : BaseFragment<DetailsViewModel, FragmentDetailsBinding>
             val oldWidth = receiptTextPaint.measureText(receiptFirstLine)
             val newSize: Float = maxWidth.toFloat() / oldWidth * receiptTextPaint.textSize
             setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize)
-
             val params = TextViewCompat.getTextMetricsParams(this)
             val precomputed = withContext(Dispatchers.Default) {
                 PrecomputedTextCompat.create(receipt.plainText, params)
@@ -214,9 +204,18 @@ class DetailsFragment() : BaseFragment<DetailsViewModel, FragmentDetailsBinding>
         }
     }
 
-    private fun observeDelete() {
-        viewModel.deleteDone.observe(viewLifecycleOwner) { deleted ->
+    private fun observeDelete() = with(viewModel.deleteDone) {
+        observe(viewLifecycleOwner) { deleted ->
             if (deleted) activity?.onBackPressed()
+        }
+    }
+
+    private fun observeError() = with(viewModel.errorLoading) {
+        observe(viewLifecycleOwner) { error ->
+            if (error) {
+                Toast.makeText(requireContext(), R.string.details_error_loading, LENGTH_SHORT).show()
+                requireActivity().onBackPressed()
+            }
         }
     }
 

@@ -10,9 +10,10 @@
     <string name="scan_qr_code">Відскануйте QR-код</string>
     <string name="scan_invalid">Некоректний QR-код</string>
     <string name="scan_loading">Завантаження чека</string>
-    <string name="scan_no_network">Очікування мережі…</string>
-    <string name="scan_connecting_failed">Не вдалось завантажити</string>
-    <string name="scan_save_failed">Не вдалось зберігти</string>
+    <string name="scan_error_no_network">Очікування мережі…</string>
+    <string name="scan_error_connection">Не вдалось завантажити</string>
+    <string name="scan_error_save">Не вдалось зберігти</string>
+    <string name="details_error_loading">Помилка завантаження</string>
     <string name="details_receipt">Деталі чека</string>
     <string name="details_no_browser">Веб-браузер не встановлено</string>
     <string name="details_delete_alert_title">Видалити чек</string>
