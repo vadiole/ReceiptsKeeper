@@ -14,3 +14,6 @@ Scan and view your e-receipts
 - Beautiful animations
 - Dark theme support
 - Cool splash screen
+
+#### Test Receipts
+<img src="https://raw.githubusercontent.com/vadiole/receiptskeeper/master/assets/1.jpeg" alt="Receipt 1" width="25%" height="25%"><img src="https://raw.githubusercontent.com/vadiole/receiptskeeper/master/assets/2.jpeg" alt="Receipt 2" width="25%" height="25%"><img src="https://raw.githubusercontent.com/vadiole/receiptskeeper/master/assets/3.jpeg" alt="Receipt 3" width="25%" height="25%"><img src="https://raw.githubusercontent.com/vadiole/receiptskeeper/master/assets/4.jpeg" alt="Receipt 4" width="25%" height="25%">
